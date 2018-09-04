@@ -1,0 +1,83 @@
+--1.	Mostrar los nombres de los empleados ordenados alfabéticamente en orden descendiente (z..a)
+--Query
+	--select * from Empleado$ order by nombre desc
+
+--2.    Seleccionar el nombre, el oficio y la localidad de los departamentos donde trabajan los vendedores
+	--select nombre, oficio, localizacion from Empleado$, Departamento$ where oficio = 'Vendedor' and Empleado$.depto_no=Departamento$.depto_no
+
+--3. Listar los nombres de los empleados cuyo nombre termine con la letra "o"
+	--select nombre from Empleado$ where nombre like '%o' --si fuera la primera sería 'o%' (con * me aparecería todo)
+
+--4.	Seleccionar el nombre, el oficio y salario de los empleados que trabajan en León
+	--select nombre, oficio, salario from Empleado$ where dir= 'Leon' -- si hubera tenido Leon algo también me lo hubiera puesto
+
+--5.	Seleccionar el nombre, salario y localidad donde trabaja los empleados que tengan un salario entre 10,000 y 13,000
+/*select nombre, salario, localizacion from Empleado$, Departamento$ where salario between 10000 and 13000 and Empleado$.depto_no=Departamento$.depto_no 
+	--select Empleado$.nombre, Empleado$.salario, Departamento$.localizacion from...
+Tambien el salario se podría poner así:  where salario>= 10000 and salario<=13000 and... 
+sale repetido por que no uní el primer key con su foreign */
+
+--6.	Mostrar los departamentos con más de 5 empleados
+	/*select Empleado$.depto_no, count(*) from Empleado$ , Departamento$  esto tiene que coincidir cn
+	where Empleado$.depto_no = Departamento$.depto_no 
+	group by Empleado$.depto_no having count(*) >5                        esto  */      
+
+	-- Ahora con el nombre del departamento
+	/*
+	select Empleado$.depto_no, Departamento$.nombre_depto, count(*) as total from Empleado$ , Departamento$
+	where Empleado$.depto_no = Departamento$.depto_no 
+	group by Empleado$.depto_no, Departamento$.nombre_depto having count(*) >5    */  
+	
+--7.	Mostrar el nombre, salario y nombre del departamento de los empleados que tengan el mismo oficio que Castillo Pedro
+	/* select nombre, salario, nombre_depto from Empleado$, Departamento$    
+	where Empleado$.depto_no= Departamento$.depto_no         
+	and oficio= (select oficio from Empleado$ where nombre= 'Delgado Carmen')*/
+
+--8.	Mostrar el nombre, salario y nombre del departamento de los empleados que tengan el mismo oficio que Castillo Pedro y que no tengan comisión 
+	   /* select nombre, salario, nombre_depto from Empleado$, Departamento$    
+	where Empleado$.depto_no= Departamento$.depto_no         
+	and oficio= (select oficio from Empleado$ where nombre= 'Delgado Carmen')
+	and comision = 0 -- or is null  */
+
+--9.	Mostrar los datos de los empleados que trabajan en el departamento de contabilidad, ordenados por nombre
+	--select * from Empleado$, Departamento$ where Empleado$.depto_no=Departamento$.depto_no and nombre_depto = 'Contabilidad' order by nombre
+	--  select Empleado$.* from Empleado$, Departamento$ where Empleado$.depto_no=Departamento$.depto_no and nombre_depto = 'Desarrollo de software' order by nombre
+
+ --10.	Nombre de los empleados que trabajan en León y cuyo oficio sea analista o empleado 
+	 /*select Empleado$.nombre from Empleado$
+	where dir ='Leon' and oficio in('vendedor', 'empleado') */
+
+--11.	Calcular el salario medio de todos los empleados 
+	--select avg(salario) from Empleado$
+
+--12.	¿cuál es el máximo salario de los empleados del departamento 10?
+	--select max(salario) from Empleado$ where depto_no=10
+
+--13.	Calcula el salario mínimo de los empleados del departamento de ventas
+	--select min(salario) from Empleado$,Departamento$ where Departamento$.nombre_depto='ventas'
+
+--14.	Calcula el promedio del salario de los empleados del departamento de contabilidad
+select avg(salario) from Empleado$, Departamento$ where Departamento$.nombre_depto='Contabilidad'
+
+--15.	¿Cuántos empleados hay en el departamento número 10?
+select count(*) as total from Empleado$, Departamento$
+where Empleado$.depto_no = Departamento$.depto_no 
+and Departamento$.depto_no='10'
+
+
+--16. 16.	¿cuántos empleados hay en el departamento de ventas?
+select count(*) as total from Empleado$, Departamento$
+where Empleado$.depto_no = Departamento$.depto_no 
+and Departamento$.nombre_depto='ventas'
+
+--17.	Calcula el número de empleados que no tienen comisión
+select count(*) as total from Empleado$
+where comision='0'
+
+--18.	Mostrar cuántos nombres de los empleados empiezan con la letra A
+
+select count(*) as total from Empleado$
+where comision='0'
+
+--19.	Mostrar el número de empleados de cada departamento
+select count(*) as total from Empleado$, 
