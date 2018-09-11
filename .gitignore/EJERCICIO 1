@@ -1,0 +1,53 @@
+COMANDOS
+
+--create database productosR
+--use productosR --usa esa base de datos y trabaja sobre esta tabla. O productosR consulta.
+/*create table productos(
+	codigo varchar(3), --columnas, la "," separa las columnas
+	nombre varchar(30),
+	precio decimal(6),
+	fechaAlta date, 
+	primary key (codigo)) --cierro la relación => productos(codigo(PK),nombre,precio,fechaAlta) */
+	-- varchar es alfa numerico
+	-- botón derecho= diseño de mi tabla
+	--primary key NOT NULL
+	--seleccionar las primeras 100 filas=> podemos tener el select
+	
+	--INSERTAR DATOS A LA TABLA
+	/*insert into productos values('a01','melon',12.5,'2018-08-30')
+	insert into productos values('b01','papaya',10.5,'2018-08-30')
+	insert into productos values('b02','sandia',18.5,'2018-08-30')*/
+
+	--OJO U: sa y pass: sqladmin
+
+
+		select * from productos  
+	 -- * significa todo 
+
+		--traernos todos los productos que se llamen melon
+	--select * from prodcutos where nombre='melon'
+
+		--todos que el código empiece con b
+	--select * from productos where codigo like 'b%' -- % es lo que sea, lo puedo usar tanto antes como después
+
+		--cuáles son lo que tienen el precio mayor a 10
+	--select * from productos where precio>10
+
+		--promedio de pesos
+	--select avg(precio) from productos -- atributo derivado que es promedio
+	--select avg(precio) as promedio from prodcutos --derivado ->marca nombre al resultado
+
+		--agregar a la tabla una categoría
+	--alter table productos add categoria varchar(10)
+
+		--nombrar la categoria
+	--update prodcutos set categoria= 'fruta'
+
+		-- cambiar categoria
+	--update prodcutos set categoria='xxx' where nombre='melon'
+
+		--nombres distintos de esa categoria solamente
+	--select distinct categoria from prodcutos 
+
+		--cantidad de prodcutos que tenemos en cada categoria
+	select categoria, count(*)as total from prodcutos group by categoria  -- categoria tiene que estar en el select, as total es para ponerle nombre
