@@ -1,0 +1,37 @@
+20
+-09-2018
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication1 {
+    class Program {
+        static void Main ( string[] args ) {
+
+            double num, pot, res;
+            Console.WriteLine ("digita el numero que quieres elevar:");
+            num = Convert.ToDouble (Console.ReadLine ());
+
+            Console.WriteLine ("digita la potencia que quieres elevar:");
+            pot = Convert.ToDouble (Console.ReadLine ());
+
+            res = Math.Pow (num, pot);
+
+            Console.WriteLine ("el resultado es:" + res);
+
+            Console.ReadKey (); //esperar a leer una tecla del usuario (enter)
+        }
+    }
+}
+
+LE PONEMOS INICIAR PARA QUE CORRA LA CONSOLA
+VARIABLES:
+int 
+float menor precisión
+int i=int.MaxValue
+int ii= int.MinValue
+
+
+
