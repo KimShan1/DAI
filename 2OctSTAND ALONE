@@ -1,0 +1,161 @@
+Lo pongo en la conexión, llenar.
+A conexión le agregamos otra conexión estática. 
+Solución-> Conexiones 
+
+Agregamos:
+
+public void llenarCombo(comboBox cb){
+  try{//abrir la conexion para la base de datos-> necesito un SQL conection 
+      SqlConnection con;
+      con= Conexion.agregarConexion();
+      cmd= new SqlCommand("select nombre from programa",con);
+      //para ejecutar el query> reader y me regresa un data reader
+      rd= cmd.ExecuteReader();
+      //hago un ciclio para leer los adtos que acabo de sacar
+      while(rd.Read()) {
+      cb.Items.Add(rd["nombre"].ToString());//tiene un String, para sacarlo del data reader. Lo que tienes en la columna que sacaste del nombre
+      //pasas al tercer datos, y lo pasas al combo. 
+      
+      }
+      cb.SelectIndex=0; //ponle el primer dato del combo box para mostrarlo.  
+     rd.Close();//cerramos el data reader.
+     
+  } catch(Exception ex) {
+    MessageBox.Show("No se pudo llenar el combo"+ ex) //ex para saber el error. //OJO en el Window Loaded ver:OJO1
+    
+  }
+}
+
+OJO1:
+public Alta(){
+  InitializeComponent();
+}
+
+private void Window_Loaded(object sender,... {//ir a la base de datos, traerse los nombres y llenar ese combo
+  Conexion c= new Conexion();
+  c.llenarCombo(cbProgramas); //cbProgramas es el nombre del combo box
+}
+
+HACER EL ALTA, HACEMOS UNA CLASE ALUMNO CON TODOS LOS ATRIBUTOS DEL ALTA. 
+Agrega, elimina, se hace en l aclase Alumno. 
+
+Registro alumno-> boton derecho -> agregar-> clase 
+le llamamos Alumno.cs 
+
+namespace RegistroAlumno{
+  class Alumno{
+  public Int16 claveUnica {get; set; }
+  public String nombre  {get; set; }
+  public String sexo  {get; set; }
+  public String correo  {get; set; }
+  public Int16 semestre {get; set; }
+  public int programa {get; set; } //id y nombre del programa
+  
+  //Ahora genero un constructor
+  public Alumno(Int16 claveUnica,String nombre, String sexo, String correo, Int16 semestre, int programa){
+    this.claveUnica=claveUnica;
+    this.nombre=nombre;
+    this.sexo=sexo;
+    this.correo=correo;
+    this.semestre=semestre;
+    this.programa=programa
+  }//constructor
+  
+  public Alumno(Int16 claveUnica){
+    this.claveUnica=claveUnica;
+  }//constructor, para la baja
+  
+  
+  //le voy a crear una funcion que sea agregar alumno a la base de datos en ALUMNO.CS
+  public int agregarAlumno(Alumno a){
+      int res=0;//para ver si no se pudo o si
+      //1ro abrir la base de datos
+      Sqlconnection(agregar libreria= system.dataclient) con; // ya cree la conexion, es una clase estatica
+      con= Conexion.agregarConexion();
+      SqlCommand cmd= new SqlCommand(String.Format("insert into alumno(claveUnica,nombre,sexo,correo,semestre,idPrograma) //datos que tiene el sql
+                  values ('{0}','{1}','{2}','{3}','{4}','{5}')",a.claveUnica,a.nombre,a.sexo,a.correo,a.semestre,a.programa),con);
+      //no tengo un data reader poque no voy a sacar datos.
+        res=cmd.ExecuteNonQuery(); //devuelve el numero de filas afectadas
+      //2do sql command para insertar datos
+      //ejecutar el comando
+      
+      return res;
+  }//esto lo tengo mandar a llamar en el boton de agregar, aqui tenemos que hacer el alta
+  
+  }//Alumno
+}//RegisAlum
+
+//DOBLE CLICK AL BOTON DE AGREGAR en ALTA.XAML.CS
+abajo del Conexion c= new Conexion();
+c.llenarCombo(cb...)
+private void btAgregar_Click(object sender, Rout...){
+    int res;
+    Alumno a= new Alumno(Int16.Parse(tbFolio.Text),tbNombre.Text,tbSexo.Text,tbCorreo.Text,Int16.Parse(tbSemestre.txt),cbProgramas.SelectedIndex)//porque en mi tabla lo inicialice en 1//vamos ligandolos con nuestros labels, donde el usario va a ingresar la info 
+    //OJO: SELECT INDEX ES LA POSICION 
+    //ahora lo agrega, pero esto me regresa un int
+    res=a.agregarAlumno(a);
+    if(res>0)
+          MessageBox.Show("el alumno dado de alta"); 
+      else
+          MessageBox.Show("el alumno no fue dado de alta");
+          
+      return res; 
+           
+    }
+  }
+}
+
+
+
+//En el main Window de la primer, para no estar repitiendo ana, ana ana...
+en MAINWINDOW.XAML
+
+private void Window_Loaded(object sender,Route...)
+{
+    txtPassword.Text="ana";
+    txtUsuario.Text="ana";
+}
+
+
+en ALUMNO.CS
+
+public int eliminaAlumno(int claveUnica){
+  int res=0;
+  SqlConnection con;
+  con= Conexion.agregarConexion();
+  SqlCommand cmd= new SqlCommand(string.Format(("delete from alumno where claveUnica={0}"),claveUnica),con);
+  //lo ejecuto asi:
+  res=cmd.ExecuteNonQuery();
+  //cerramos la conexion
+  con.Close();
+  return res;
+}
+
+//DOBLE CLICK DEL ELIMINAR
+
+private void btEliminar_Click(){
+  this.Hide();
+  Baja w= new Baja();
+  w.Show();
+}
+
+//AHORA A BAJA.XAML.CS EN BAJA.XAML
+
+private void btBaja_Click(object sender, ...){
+  Alumno a= new Alumno(Int16.Parse(tbFolio.Text));
+  int res=a.eliminaAlumno(tbFolio.Text));
+  if(res>0)
+      MessaheBox.Show("el alumno se elimino");
+  else
+      MessageBox.Show("el alumno no se pudo eliminar");
+}
+
+//REGRESAR BOTON EN BAJA.XAML
+
+ private void btRegresar_Click(object sender...){
+ Alta w= new Alta();
+ w.Show();
+ this.Hide();
+ 
+ }
+
