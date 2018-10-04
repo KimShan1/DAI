@@ -1,0 +1,95 @@
+<Grid.ColumnDefinitions>
+ <ColumnDefinition Width="267*"/>
+ <ColumnDefinition Width="25*"/>
+ </Grid.ColumnDefinitions>
+ <TextBox x:Name="tbNombre" HorizontalAlignment="Left" Height="23"
+Margin="107,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+ <Label x:Name="nobme" Content="nombre" HorizontalAlignment="Left"
+Margin="22,68,0,0" VerticalAlignment="Top"/>
+ <Button Content="buscar" HorizontalAlignment="Left" Margin="107,132,0,0"
+VerticalAlignment="Top" Width="75" Click="Button_Click" />
+ <DataGrid x:Name="dgDatos" HorizontalAlignment="Left" Margin="74,188,0,0"
+VerticalAlignment="Top" Height="300" Width="400" Grid.ColumnSpan="2"/>
+ <Button Content="Regresar" HorizontalAlignment="Left" Margin="227,132,0,0"
+VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+
+
+En la clase ALUMNO.CS ponemos la funcionaliad
+PENSAR UN CONSTRUCTOR SOLO CON NOMBRE
+
+publicAlumno(String nombre){
+this.nombre=nombre;
+}
+
+public List<Alumno> buscarAlumno(String nombre){
+  List<Alumno>lis= new List<Alumno>();
+  Alumno a;
+  //crear la conexion, vamos a sacar muchos datos
+  SqlConnection.agregarConexion();
+  SqlCommand cmd= new SqlCommand(String.Format("select claveUnica,nombre,sexo,correo,semestre,idPrograma from alumno where nombre like '%{0}%'",nombre),con);
+  //adentro tiene el query y la conezion, el query lo hago con un String format, cuando ejecute esto e va a regresar el query
+  // el {0} porque vamos a usar el String.Format ("{0}, va ir sustituyendo los valores en {0},{1},{2} (ejsihay 3 valores tendremos 3 de {}s
+//Ahora lo ejecuto, cuando uso un command es ExecuteNonQuery cuando no me voyba traer datos, pero como si quiero traer, uso el reader
+SqlDataReader dr =cmd.ExecuteReader();
+//como no sabes cuantos nos trajo
+while(dr.Read()){
+  a=new Alumno(); //vacio //creo un constructor vacio
+  [ASI EN ALUMNO.CS -> public Alumno(){}]
+  a.claveUnica=dr.GetInt16(0);
+  a.nombre= dr.GetString(1);
+  a.sexo=dr.GetString(2);
+  a.correo= dr.GetString(3);
+  a.semestre=dr.GetInt16(4);
+  a.programa=dr.GetInt16(5);
+  
+  //ahora lo metemos a la lista 
+  lis.Add(a);
+  
+}//while
+con.Close();
+return lis;
+}//ya tengo la fn que me va a hacer la busqueda
+
+EN EL BT BUSCAR.xaml, aquí ya vamos a activarlo
+
+PRIVATE VOID bUTTON_cLICK(OBJECT sender, RoutedEvent
+{
+//la lista la voy a tener que igualar al dataGrid, cualidades= automaticamanete el item source lo puedo igualar con una lista
+Alumno a = new Alumno();
+  dgDatos.ItemsSource= a.buscarAlumno(tbNombre.Text);
+}
+
+private void Window_Loaded(object sender, 
+{
+    tbNombre.Focus();
+    }
+
+EN EL BOTON DE BUSCAR 
+
+private void Button_Click(object sender,...
+{
+Buscar b= new Buscar();
+b.Show();
+this.Hide();
+}
+
+
+EN BOTON DE REGRESAR DOBLE CLICK en ALTA
+private void Button_Click_1
+Alta w = new RegistroAlumno.Alta();
+w.Show();
+this.Hide();
+
+EN ALUMNO.CS
+
+public int modificar(Alumno a){
+    int res=0;
+    SqlConnection con= Conexion.agregarConexion(); //abrimos la conexion
+    SqlCommand cmd= new SqlCommand(String.Fprmat("update alumno set correo='{0}' where claveUnica={1}, a.correo,a.claveUnica",con);
+    res=cmd.ExecuteNonQuery();
+ 
+    return res;
+}
+
+
+
