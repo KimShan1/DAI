@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class Pagina1 : System.Web.UI.Page {
+    protected void Page_Load ( object sender, EventArgs e ) {
+                         //el if sirve para saber si entré x primera vez
+        if (!IsPostBack)//un refrescamiento de la página para que solo lo haga primera vez
+
+{           //la página es la primera vez o es un retroceso
+
+            Application.Lock ();// para que no se incremente de manera inecesaria
+
+            Application["Usuarios"] = Convert.ToInt16 (Application["usuario"]) + 1;
+
+            Application.UnLock ();
+
+            lbContador.Text = Application["Usuarios"].ToString ();
+
+        }
+
+        Page.Title = ( String )Application["Empresa"];//le ponemos nombre a la pestaña de la págna que asingamos en la global.asax
+    }
+
+    protected void btPagina2_Click ( object sender, EventArgs e ) {
+        //en la sesion recupero el usuario
+        // en la cookie recupero la contraseña, se guarda en la maquina
+        //la cookie llamada contrasena, se manerja como un archivo
+
+        Session["sesion"] = txUsuario.Text; //guardo una sesión, se guarda en el servidor
+
+        HttpCookie cookie1 = new HttpCookie ("contrasena", txContraseña.Text); //... 1
+
+        cookie1.Expires = new DateTime (2018, 12, 25); //cuando quiero que se expire en la máquina ... 2
+
+        Response.Cookies.Add (cookie1);//... 3
+        //guardo 1,2,3 una cookie en mi máquina
+
+        Response.Redirect ("Pagina2.aspx");
+    }
+}
